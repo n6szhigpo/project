@@ -1,0 +1,206 @@
+                                                      SQL Questions
+Q1:How much is each member borrowing?
+query='''SELECT m.first_name || ' ' || m.last_name AS member_name,
+       COUNT(c.checkout_id) AS total_checkouts
+       FROM members m
+       LEFT JOIN checkouts c
+       ON m.member_id = c.member_id
+      GROUP BY
+      m.first_name,
+      m.last_name
+    '''
+print("each student number of books borrowed: ")
+run(query)
+ndex	member_name	total_checkouts
+0	Adam Badr	2
+1	Adam Fahmy	17
+2	Adam Shafik	5
+3	Ahmed Fahmy	10
+4	Ahmed Gamal	1
+5	Ahmed Shafik	17
+6	Ahmed Zaki	3
+7	Ali Fahmy	1
+8	Ali Hegazy	0
+9	Amir Fouad	1
+10	Amir Wahba	0
+11	Aya Ibrahim	3
+12	Aya Wahba	25
+13	Bassel Adel	0
+14	Bassel Hegazy	9
+15	Bassel Wahba	2
+16	Dina Adel	2
+17	Dina Rashad	7
+18	Dina Wahba	7
+19	Fares Adel	11
+20	Fares Fahmy	0
+21	Fares Fouad	0
+22	Fares Sabry	0
+23	Fares Saleh	2
+24	Fares Wahba	0
+25	Farida Osman	0
+26	Habiba Nabil	1
+27	Habiba Osman	0
+28	Hamza Sabry	3
+29	Hana Nabil	0
+30	Hassan Adel	3
+31	Hassan Rashad	1
+32	Hassan Saleh	1
+33	Jana Hegazy	2
+34	Karim Fahmy	1
+35	Karim Rashad	0
+36	Layla Fouad	0
+37	Layla Hegazy	6
+38	Layla Mansour	1
+39	Layla Wahba	2
+40	Lina Halim	7
+41	Lina Mansour	3
+42	Lina Rashad	6
+43	Lina Zaki	1
+44	Mai Mansour	0
+45	Malak Fahmy	9
+46	Marwan Wahba	0
+47	Menna Halim	2
+48	Mostafa Fouad	18
+49	Mostafa Kamel	2
+50	Mostafa Saleh	2
+51	Mostafa Wahba	3
+52	Nada Rashad	2
+53	Nada Riad	2
+54	Nada Saleh	3
+55	Nada Zaki	6
+56	Nour Nabil	18
+57	Rana Fouad	7
+58	Rana Halim	0
+59	Rana Kamel	0
+60	Rana Osman	10
+61	Reem Osman	16
+62	Retaj Adel	1
+63	Retaj Fahmy	6
+64	Retaj Kamel	2
+65	Salma Ibrahim	1
+66	Sara Rashad	16
+67	Seif Zaki	14
+68	Sherif Fahmy	0
+69	Sherif Fouad	3
+70	Sherif Saleh	21
+71	Tarek Adel	7
+72	Yassin Kamel	2
+73	Youssef Fouad	6
+74	Youssef Halim	3
+75	Youssef Hegazy	17
+76	Youssef Kamel	0
+77	Ziad Fahmy	8
+78	Ziad Fouad	2
+79	Ziad Saleh	19---------------------------------------------------------------
+Q2:Which books match a chosen author pattern? 'on'
+query='''
+SELECT title,author FROM books
+WHERE author LIKE '%ou%'
+'''
+print("books contain 'ou' : ")
+run(query)
+book's authors contain 'ou' : 
+
+        title	                author
+0	The Lantern Maker	Adel Roushdy
+1	Rooftop Astronomers	Adel Roushdy
+2	Circuits for Beginners	Galal Mounir
+3	The Robot in Row Nine	Galal Mounir
+4	Storms and Sailboats	Mahmoud Rafei
+5	The Clockwork Orchard	Mahmoud Rafei
+6	Notes from the Delta	Mona Kholoussy
+7	The Glass Beehive	Mona Kholoussy
+-----------------------------------
+#Q3:What are the most popular books? "FRIST 5"
+query='''SELECT b.title ,
+COUNT(c.checkout_id) AS total_checkouts
+FROM books b
+LEFT JOIN checkouts c ON b.book_id = c.book_id
+GROUP BY b.title
+ORDER BY
+total_checkouts DESC
+LIMIT 5'''
+print("top 5 borrowed books:")
+run(query)
+
+top 5 borrowed books:
+        title	                total_checkouts
+0	The Silver Kite	        57
+1	Fossils and Fireflies	55
+2	Circuits for Beginners	46
+3	Kites Over Cairo	38
+4	Storms and Sailboats	25
+-----------------------------------------------
+#Q4:4. Who are the most active readers?
+query='''SELECT 
+     m.first_name || ' ' || m.last_name AS member_name,      
+        COUNT(c.checkout_id) AS BOROWS
+         FROM members m
+         LEFT JOIN checkouts c
+         ON m.member_id = c.member_id
+         GROUP BY
+         m.first_name,
+         m.last_name
+         ORDER BY
+         BOROWS DESC
+         LIMIT 10'''
+print("top 10 readers:")
+run(query)
+
+top 10 readers:
+index	member_name	BOROWS
+0	Aya Wahba	25
+1	Sherif Saleh	21
+2	Ziad Saleh	19
+3	Mostafa Fouad	18
+4	Nour Nabil	18
+5	Adam Fahmy	17
+6	Ahmed Shafik	17
+7	Youssef Hegazy	17
+8	Reem Osman	16
+9	Sara Rashad	16
+---------------------------------------
+Q5:What does a neighborhood's activity look like further back in time?
+query='''SELECT m.first_name || ' ' || m.last_name AS member_name,
+         COUNT(c.checkout_id) AS BOROWS
+         FROM members m
+         JOIN checkouts c
+         ON m.member_id = c.member_id
+         WHERE m.neighborhood ='Maadi'
+         GROUP BY
+         m.member_id, m.first_name, m.last_name
+         ORDER BY
+         c.checkout_date DESC
+         limit 10
+         OFFSET 10
+         '''
+print("readers actvity in Maadi neighborhood:")
+run(query)
+
+index	member_name	BOROWS
+0	Adam Badr	2
+1	Menna Halim	2
+2	Salma Ibrahim	1
+3	Youssef Fouad	6
+4	Dina Rashad	7
+5	Habiba Nabil	1
+6	Fares Saleh	2
+7	Youssef Halim	3
+--------------------------------------------------------
+                       steps done 
+At first I merged the members and checkout table together based on member id 
+which is primary key in members table and forgin key in checkouts table giving
+us a table contain each member information and checkouts information then I merged
+this table with books table based on book id so I have all information about members
+and checkouts then I merged the json file that contain books information with the 
+table based on book id so I have all members info, checkouts and each book information
+after that I extracted the Reading Kickoff checkout data from the webpage, prepared it
+to have the same structure as the existing checkout data, and then 
+added it to the combined dataset so I would not lose any data
+                            
+                 API vs Web Scraping
+Webpages are designed to be seen by user not to deliver data automatically ,
+SO it's is extracted manually. While APIs are designed to deliver data 
+directly in a structured format (like JSON).In this project, it mattered
+ because the webpage didn't have an API, so we did extra cleaning steps to
+ make the web data match our database before combining them.
